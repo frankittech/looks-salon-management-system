@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fce4ec, #fff);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            padding: 40px 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            text-align: center;
+            color: #c2185b;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #c2185b;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #c2185b;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #880e4f;
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 17px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #555;
+        }
+
+        .register-link a {
+            color: #c2185b;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #777;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: #c2185b;
+            font-size: 13px;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">LOOKS SALON</div>
+    <p class="subtitle">Your beauty, our passion.</p>
+
+    <h2>Customer Login</h2>
+
+    <form id="loginForm">
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your registered email"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+            <a href="#" class="forgot-password"
+               id="forgotPassword">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="loginBtn">
+            Login
+        </button>
+
+        <p class="message" id="message"></p>
+
+    </form>
+
+    <p class="register-link">
+        Don't have an account?
+        <a href="register.html">Create an account</a>
+    </p>
+
+    <a href="../index.html" class="back-link">
+        Back to Looks Salon
+    </a>
+
+</div>
+
+<script>
+    const API_URL = 'http://127.0.0.1:3000/api';
+
+    const loginForm = document.getElementById('loginForm');
+    const message = document.getElementById('message');
+    const loginBtn = document.getElementById('loginBtn');
+
+    // Customer login
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Logging in...';
+
+        message.style.color = 'red';
+        message.textContent = '';
+
+        try {
+            const response = await fetch(`${API_URL}/customer/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed.');
+            }
+
+            message.style.color = 'green';
+            message.textContent = 'Login successful! Redirecting...';
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+
+        } catch (error) {
+            message.style.color = 'red';
+            message.textContent = error.message;
+
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Login';
+        }
+    });
+
+    // Password recovery is not implemented yet
+    document.getElementById('forgotPassword').addEventListener('click', function(event) {
+        event.preventDefault();
+        message.style.color = '#c2185b';
+        message.textContent = 'Please contact the salon to reset your password.';
+    });
+</script>
+
+</body>
+</html>

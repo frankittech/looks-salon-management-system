@@ -1,0 +1,23 @@
+{
+  "name": "looks-salon-backend",
+  "version": "1.0.0",
+  "description": "Looks Salon management system API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "overrides": {
+    "mysql2": "^3.24.6"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.24.6"
+  }
+}

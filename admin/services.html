@@ -1,0 +1,634 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f5f7;
+            color: #333;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #321d2b;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #f3b6d0;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #eee;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #70465e;
+        }
+
+        .main {
+            flex: 1;
+            padding: 35px;
+            min-width: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #321d2b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #777;
+        }
+
+        .summary {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px #0000000a;
+            max-width: 280px;
+        }
+
+        .summary h3 {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .summary strong {
+            font-size: 28px;
+            color: #9d527b;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000a;
+        }
+
+        .panel h2 {
+            color: #321d2b;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #a75b83;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #9d527b;
+            color: white;
+            width: 100%;
+        }
+
+        .primary-btn:hover {
+            background: #7e3e61;
+        }
+
+        .secondary-btn {
+            background: #eee;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #ffe4e4;
+            color: #b42318;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 570px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            color: #777;
+            background: #faf7f9;
+        }
+
+        .status {
+            color: #16834a;
+            background: #e5f7ed;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .inactive {
+            color: #9a6700;
+            background: #fff3cd;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #b42318;
+        }
+
+        .success {
+            color: #16834a;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media(max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">LOOKS SALON</div>
+
+        <a href="admin.html">Dashboard</a>
+        <a href="customers.html">Customers</a>
+        <a href="services.html" class="active">Services</a>
+        <a href="staff.html">Staff</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="payments.html">Payments</a>
+    </aside>
+
+    <main class="main">
+
+        <div class="header">
+            <div>
+                <h1>Services Management</h1>
+                <p>Manage the services offered by Looks Salon.</p>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h3>Total Services</h3>
+            <strong id="totalServices">0</strong>
+        </div>
+
+        <div class="content">
+
+            <!-- ADD SERVICE FORM -->
+            <section class="panel">
+                <h2 id="formTitle">Add New Service</h2>
+
+                <div id="message" class="message"></div>
+
+                <form id="serviceForm">
+
+                    <div class="form-group">
+                        <label for="name">Service Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="e.g. Hair Styling"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            placeholder="Describe the service"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price (KSh)</label>
+                        <input
+                            type="number"
+                            id="price"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (Minutes)</label>
+                        <input
+                            type="number"
+                            id="duration"
+                            min="5"
+                            max="600"
+                            value="60"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="primary-btn" id="submitBtn">
+                        Add Service
+                    </button>
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="cancelEdit"
+                        style="display:none; width:100%; margin-top:10px;"
+                    >
+                        Cancel Editing
+                    </button>
+
+                </form>
+            </section>
+
+            <!-- SERVICES TABLE -->
+            <section class="panel">
+                <h2>Available Services</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Service</th>
+                                <th>Price</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="servicesTable">
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    Loading services...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const API_URL = 'http://localhost:3000/api/services';
+
+    const serviceForm = document.getElementById('serviceForm');
+    const servicesTable = document.getElementById('servicesTable');
+    const message = document.getElementById('message');
+
+    let services = [];
+    let editingId = null;
+
+    function showMessage(text, type = 'success') {
+        message.textContent = text;
+        message.className = `message ${type}`;
+    }
+
+    function clearMessage() {
+        message.textContent = '';
+        message.className = 'message';
+    }
+
+    async function loadServices() {
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error('Could not load services.');
+            }
+
+            services = await response.json();
+
+            document.getElementById('totalServices').textContent =
+                services.length;
+
+            renderServices();
+
+        } catch (error) {
+            servicesTable.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        ${escapeHTML(error.message)}
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[character]);
+    }
+
+    function renderServices() {
+        if (services.length === 0) {
+            servicesTable.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        No services have been added yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        servicesTable.innerHTML = services.map(service => `
+            <tr>
+                <td>${service.id}</td>
+                <td>
+                    <strong>${escapeHTML(service.name)}</strong><br>
+                    <small>${escapeHTML(service.description || '')}</small>
+                </td>
+                <td>KSh ${Number(service.price).toLocaleString('en-KE', {
+                    minimumFractionDigits: 2
+                })}</td>
+                <td>${service.duration_minutes} min</td>
+                <td>
+                    <span class="status ${Number(service.is_active) === 1 ? '' : 'inactive'}">
+                        ${Number(service.is_active) === 1 ? 'Active' : 'Inactive'}
+                    </span>
+                </td>
+                <td>
+                    <div class="actions">
+                        <button class="secondary-btn"
+                            onclick="editService(${service.id})">
+                            Edit
+                        </button>
+
+                        <button class="secondary-btn"
+                            onclick="toggleService(${service.id}, ${Number(service.is_active) === 1 ? 0 : 1})">
+                            ${Number(service.is_active) === 1 ? 'Deactivate' : 'Activate'}
+                        </button>
+
+                        <button class="delete-btn"
+                            onclick="deleteService(${service.id})">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    serviceForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        clearMessage();
+
+        const serviceData = {
+            name: document.getElementById('name').value.trim(),
+            description: document.getElementById('description').value.trim(),
+            price: Number(document.getElementById('price').value),
+            duration_minutes: Number(document.getElementById('duration').value)
+        };
+
+        try {
+            const url = editingId
+                ? `${API_URL}/${editingId}`
+                : API_URL;
+
+            const response = await fetch(url, {
+                method: editingId ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(serviceData)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not save service.');
+            }
+
+            showMessage(
+                editingId
+                    ? 'Service updated successfully.'
+                    : 'Service added successfully.'
+            );
+
+            resetForm();
+            await loadServices();
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    function editService(id) {
+        const service = services.find(item => item.id === id);
+
+        if (!service) return;
+
+        editingId = id;
+
+        document.getElementById('name').value = service.name;
+        document.getElementById('description').value =
+            service.description || '';
+        document.getElementById('price').value = service.price;
+        document.getElementById('duration').value =
+            service.duration_minutes;
+
+        document.getElementById('formTitle').textContent = 'Edit Service';
+        document.getElementById('submitBtn').textContent = 'Save Changes';
+        document.getElementById('cancelEdit').style.display = 'block';
+
+        clearMessage();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function toggleService(id, isActive) {
+        const action = isActive === 1 ? 'activate' : 'deactivate';
+
+        if (!confirm(`Are you sure you want to ${action} this service?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/${id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ is_active: isActive })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not update status.');
+            }
+
+            showMessage(`Service ${action}d successfully.`);
+            await loadServices();
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    async function deleteService(id) {
+        if (!confirm('Are you sure you want to delete this service?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not delete service.');
+            }
+
+            showMessage('Service deleted successfully.');
+            await loadServices();
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    function resetForm() {
+        serviceForm.reset();
+        editingId = null;
+
+        document.getElementById('duration').value = 60;
+        document.getElementById('formTitle').textContent = 'Add New Service';
+        document.getElementById('submitBtn').textContent = 'Add Service';
+        document.getElementById('cancelEdit').style.display = 'none';
+    }
+
+    document.getElementById('cancelEdit').addEventListener('click', () => {
+        resetForm();
+        clearMessage();
+    });
+
+    loadServices();
+</script>
+
+</body>
+</html>

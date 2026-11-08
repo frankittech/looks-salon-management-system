@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Looks Salon | Customers</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f8f5f6;
+      color: #30242b;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 235px;
+      background: #38232f;
+      color: white;
+      padding: 28px 18px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      color: #f4b9d2;
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 38px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #f5e9ef;
+      text-decoration: none;
+      padding: 13px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: #70445d;
+    }
+
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .muted {
+      color: #786c74;
+      font-size: 14px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 7px;
+      padding: 11px 15px;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #a84d78;
+      color: white;
+    }
+
+    .primary:hover {
+      background: #87385e;
+    }
+
+    .refresh {
+      background: #eadde5;
+      color: #38232f;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .stat, .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 3px 15px #3923330d;
+    }
+
+    .stat h2 {
+      font-size: 29px;
+      margin-top: 12px;
+      color: #a84d78;
+    }
+
+    .panel {
+      margin-bottom: 22px;
+    }
+
+    .panel h2 {
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ded4da;
+      border-radius: 7px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #a84d78;
+    }
+
+    .form-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .search-row input {
+      max-width: 400px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 580px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #eee6eb;
+      font-size: 14px;
+    }
+
+    th {
+      color: #766673;
+      background: #fcf9fb;
+    }
+
+    .delete-btn {
+      color: #a12645;
+      background: #fbe9ee;
+    }
+
+    #message {
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .success {
+      color: #237445;
+    }
+
+    .error {
+      color: #b42336;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 25px;
+      color: #786c74;
+    }
+
+    @media (max-width: 760px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .sidebar a {
+        display: inline-block;
+        margin-right: 4px;
+      }
+
+      main {
+        padding: 18px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">Looks Salon</div>
+    <nav>
+      <a href="admin.html">Dashboard</a>
+      <a href="customers.html" class="active">Customers</a>
+      <a href="admin.html">Services & Appointments</a>
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <h1>Customers</h1>
+        <p class="muted">Manage your salon's customer records.</p>
+      </div>
+
+      <button class="refresh" onclick="loadCustomers()">
+        ↻ Refresh
+      </button>
+    </header>
+
+    <section class="stats">
+      <div class="stat">
+        <p class="muted">Total customers</p>
+        <h2 id="totalCustomers">0</h2>
+      </div>
+
+      <div class="stat">
+        <p class="muted">Matching search results</p>
+        <h2 id="matchingCustomers">0</h2>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Add a Customer</h2>
+
+      <form id="customerForm">
+        <div class="form-grid">
+          <div>
+            <label for="name">Full name *</label>
+            <input id="name" name="name"
+                   placeholder="e.g. Jane Wanjiku"
+                   required maxlength="100">
+          </div>
+
+          <div>
+            <label for="phone">Phone number *</label>
+            <input id="phone" name="phone"
+                   placeholder="e.g. 0712345678"
+                   required maxlength="30">
+          </div>
+
+          <div>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email"
+                   placeholder="jane@example.com"
+                   maxlength="150">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="primary">
+            + Add Customer
+          </button>
+          <button type="reset" class="refresh">Clear</button>
+        </div>
+      </form>
+
+      <p id="message" role="status"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Customer Records</h2>
+
+      <div class="search-row">
+        <input id="search" type="search"
+               placeholder="Search name, phone or email...">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="customerTable">
+            <tr>
+              <td colspan="5" class="empty">
+                Loading customers...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // This must match the port in your backend/.env file.
+  const API_URL = "http://localhost:3000/api/customers";
+
+  let customers = [];
+
+  const table = document.getElementById("customerTable");
+  const message = document.getElementById("message");
+  const searchInput = document.getElementById("search");
+
+  function showMessage(text, type = "") {
+    message.textContent = text;
+    message.className = type;
+  }
+
+  // Safely display text received from the API.
+  function makeCell(value) {
+    const td = document.createElement("td");
+    td.textContent = value ?? "—";
+    return td;
+  }
+
+  function getCustomerId(customer) {
+    return customer.id ?? customer.customer_id;
+  }
+
+  function getCustomerName(customer) {
+    return customer.name ?? customer.full_name ?? "";
+  }
+
+  function renderCustomers() {
+    const term = searchInput.value.trim().toLowerCase();
+
+    const filtered = customers.filter(customer => {
+      const searchable = [
+        getCustomerName(customer),
+        customer.phone,
+        customer.email
+      ].join(" ").toLowerCase();
+
+      return searchable.includes(term);
+    });
+
+    document.getElementById("totalCustomers").textContent =
+      customers.length;
+
+    document.getElementById("matchingCustomers").textContent =
+      filtered.length;
+
+    table.replaceChildren();
+
+    if (filtered.length === 0) {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 5;
+      cell.className = "empty";
+      cell.textContent = customers.length
+        ? "No customers match your search."
+        : "No customers found yet. Add your first customer above.";
+      row.appendChild(cell);
+      table.appendChild(row);
+      return;
+    }
+
+    filtered.forEach(customer => {
+      const row = document.createElement("tr");
+
+      row.appendChild(makeCell(getCustomerId(customer) ?? "—"));
+      row.appendChild(makeCell(getCustomerName(customer)));
+      row.appendChild(makeCell(customer.phone));
+      row.appendChild(makeCell(customer.email));
+
+      const actionCell = document.createElement("td");
+      const deleteButton = document.createElement("button");
+
+      deleteButton.textContent = "Delete";
+      deleteButton.className = "delete-btn";
+      deleteButton.type = "button";
+
+      deleteButton.addEventListener("click", () => {
+        deleteCustomer(getCustomerId(customer));
+      });
+
+      actionCell.appendChild(deleteButton);
+      row.appendChild(actionCell);
+      table.appendChild(row);
+    });
+  }
+
+  async function loadCustomers() {
+    table.innerHTML =
+      '<tr><td colspan="5" class="empty">Loading customers...</td></tr>';
+
+    try {
+      const response = await fetch(API_URL);
+
+      if (!response.ok) {
+        throw new Error("Server returned status " + response.status);
+      }
+
+      const data = await response.json();
+
+      // Accept either an array or an object containing customers.
+      customers = Array.isArray(data)
+        ? data
+        : (data.customers ?? []);
+
+      renderCustomers();
+      showMessage("Customer records loaded.", "success");
+    } catch (error) {
+      customers = [];
+      renderCustomers();
+      showMessage(
+        "Could not load customers. Check that the backend is running " +
+        "and the /api/customers endpoint exists. " + error.message,
+        "error"
+      );
+    }
+  }
+
+  document.getElementById("customerForm")
+    .addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const customer = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim() || null
+      };
+
+      if (!customer.name || !customer.phone) {
+        showMessage("Name and phone number are required.", "error");
+        return;
+      }
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(customer)
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.error || result.message ||
+                          "Could not add customer.");
+        }
+
+        this.reset();
+        showMessage("Customer added successfully.", "success");
+        await loadCustomers();
+      } catch (error) {
+        showMessage(
+          "Could not add customer: " + error.message,
+          "error"
+        );
+      }
+    });
+
+  async function deleteCustomer(id) {
+    if (id === undefined || id === null) {
+      showMessage("Customer ID was not returned by the API.", "error");
+      return;
+    }
+
+    if (!confirm("Are you sure you want to delete this customer?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        API_URL + "/" + encodeURIComponent(id),
+        { method: "DELETE" }
+      );
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message ||
+                        "Could not delete customer.");
+      }
+
+      showMessage("Customer deleted successfully.", "success");
+      await loadCustomers();
+    } catch (error) {
+      showMessage(
+        "Could not delete customer: " + error.message,
+        "error"
+      );
+    }
+  }
+
+  searchInput.addEventListener("input", renderCustomers);
+
+  // Load records when the page opens.
+  loadCustomers();
+</script>
+</body>
+</html>

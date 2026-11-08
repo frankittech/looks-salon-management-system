@@ -1,0 +1,880 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looks Salon | Beauty, Elegance & Confidence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: #33252d;
+            background: #fffafa;
+        }
+
+        :root {
+            --pink: #d65b83;
+            --dark-pink: #a83d65;
+            --light-pink: #fff0f4;
+            --cream: #fffafa;
+            --dark: #33252d;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* NAVIGATION */
+
+        header {
+            background: rgba(255,250,250,0.97);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 29px;
+            font-weight: 700;
+            color: var(--dark-pink);
+        }
+
+        .logo span {
+            color: var(--dark);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--pink);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--pink);
+            color: white;
+            padding: 13px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 27px;
+            color: var(--dark);
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 590px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(90deg, rgba(35,18,28,0.75), rgba(35,18,28,0.12)),
+                url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1800&q=85');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 8%;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-tag {
+            color: #ffd5e2;
+            font-size: 13px;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 1.15;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.8;
+            max-width: 520px;
+            margin-bottom: 30px;
+            color: #fff1f5;
+        }
+
+        .hero .btn {
+            padding: 16px 32px;
+        }
+
+        .hero .secondary-btn {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 15px 28px;
+            border: 1px solid white;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* GENERAL SECTIONS */
+
+        section {
+            padding: 85px 7%;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-heading small {
+            color: var(--pink);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .section-heading h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 39px;
+            margin: 12px 0;
+        }
+
+        .section-heading p {
+            color: #786b72;
+            line-height: 1.7;
+        }
+
+        /* SERVICES */
+
+        .services {
+            background: white;
+        }
+
+        .service-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .service-card {
+            background: #fffafa;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+        }
+
+        .service-info {
+            padding: 23px;
+        }
+
+        .service-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .service-info p {
+            color: #786b72;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 48px;
+        }
+
+        .service-info a {
+            display: inline-block;
+            color: var(--dark-pink);
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 18px;
+        }
+
+        /* ABOUT */
+
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 55px;
+            background: var(--light-pink);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 440px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .about-content small {
+            color: var(--dark-pink);
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            margin: 18px 0;
+        }
+
+        .about-content p {
+            color: #70616a;
+            line-height: 1.9;
+            margin-bottom: 18px;
+        }
+
+        /* GALLERY */
+
+        .gallery {
+            background: white;
+        }
+
+        .gallery-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.03);
+        }
+
+        /* TESTIMONIALS */
+
+        .testimonials {
+            background: var(--light-pink);
+        }
+
+        .testimonial-grid {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 28px;
+            border-radius: 13px;
+            text-align: center;
+        }
+
+        .stars {
+            color: #e9a33b;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-card p {
+            color: #786b72;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .testimonial-card h4 {
+            margin-top: 20px;
+            color: var(--dark-pink);
+        }
+
+        /* BOOKING BANNER */
+
+        .booking-banner {
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(rgba(100,35,61,0.85), rgba(100,35,61,0.85)),
+                url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1600&q=85');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .booking-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 43px;
+            margin-bottom: 15px;
+        }
+
+        .booking-banner p {
+            margin-bottom: 28px;
+            color: #ffe5ed;
+        }
+
+        /* CONTACT */
+
+        .contact {
+            background: white;
+        }
+
+        .contact-grid {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            text-align: center;
+        }
+
+        .contact-item {
+            padding: 30px 22px;
+            background: #fff7f9;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+            transition: 0.3s;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .contact-item h3 {
+            color: var(--dark-pink);
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+        }
+
+        .contact-item p {
+            color: #786b72;
+            line-height: 1.9;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .contact-item p a {
+            color: var(--dark-pink);
+            font-weight: 600;
+        }
+
+        .contact-action {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 11px 20px;
+            background: var(--pink);
+            color: white;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .contact-action:hover {
+            background: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+
+        .contact-map {
+            max-width: 1100px;
+            margin: 45px auto 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .contact-map iframe {
+            width: 100%;
+            height: 350px;
+            border: 0;
+            display: block;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #30212a;
+            color: white;
+            text-align: center;
+            padding: 35px 15px;
+        }
+
+        footer .logo {
+            color: #ffabc5;
+            margin-bottom: 12px;
+        }
+
+        footer p {
+            color: #d7c6ce;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #ffabc5;
+            font-size: 12px;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 850px) {
+            .nav-links {
+                gap: 15px;
+            }
+
+            .service-grid,
+            .testimonial-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links .btn {
+                margin-top: 5px;
+            }
+
+            .hero {
+                min-height: 520px;
+                padding: 65px 7%;
+            }
+
+            .hero .secondary-btn {
+                margin: 15px 0 0;
+            }
+
+            section {
+                padding: 65px 6%;
+            }
+
+            .section-heading h2,
+            .about-content h2 {
+                font-size: 32px;
+            }
+
+            .service-grid,
+            .testimonial-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gallery-grid img {
+                height: 170px;
+            }
+
+            .booking-banner h2 {
+                font-size: 34px;
+            }
+
+            .contact-map iframe {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">Looks<span>Salon.</span></a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+
+                <li><a href="customer/login.html">Customer Login</a></li>
+                <li><a href="customer/register.html">Create Account</a></li>
+                <li><a href="customer/dashboard.html">My Account</a></li>
+
+                <li><a href="booking.html" class="btn">Book Appointment</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <span class="hero-tag">Welcome to Looks Salon</span>
+
+            <h1>Beauty Begins When You Feel Confident.</h1>
+
+            <p>
+                Experience exceptional beauty and personal care services
+                designed to bring out your elegance, confidence and
+                unique style.
+            </p>
+
+            <a href="booking.html" class="btn">Book Your Appointment</a>
+            <a href="#services" class="secondary-btn">Explore Services</a>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+        <div class="section-heading">
+            <small>What We Offer</small>
+            <h2>Our Beauty Services</h2>
+            <p>Discover professional beauty treatments tailored to you.</p>
+        </div>
+
+        <div class="service-grid">
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1560869713-da86a9ecb9b6?auto=format&fit=crop&w=800&q=80" alt="Hair styling">
+                <div class="service-info">
+                    <h3>Hair Styling</h3>
+                    <p>Beautiful hairstyles and professional hair care to complement your look.</p>
+                    <a href="booking.html">Book This Service →</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" alt="Nail care">
+                <div class="service-info">
+                    <h3>Manicure & Pedicure</h3>
+                    <p>Give your hands and feet the care, beauty and attention they deserve.</p>
+                    <a href="booking.html">Book This Service →</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=80" alt="Makeup">
+                <div class="service-info">
+                    <h3>Professional Makeup</h3>
+                    <p>Look your best for special occasions, celebrations and memorable moments.</p>
+                    <a href="booking.html">Book This Service →</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=85" alt="Looks Salon interior">
+        </div>
+
+        <div class="about-content">
+            <small>ABOUT LOOKS SALON</small>
+
+            <h2>Where Beauty Meets Excellence</h2>
+
+            <p>
+                At Looks Salon, we believe that beauty is more than
+                appearance. It is about confidence, self-expression
+                and feeling good about yourself.
+            </p>
+
+            <p>
+                Our goal is to provide a welcoming environment,
+                professional beauty services and an experience
+                that leaves every customer feeling special.
+            </p>
+
+            <a href="booking.html" class="btn">Experience Our Services</a>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" id="gallery">
+        <div class="section-heading">
+            <small>Our Work</small>
+            <h2>Beauty Inspiration</h2>
+            <p>A glimpse of the beauty and creativity we celebrate.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80" alt="Beauty hairstyle">
+            <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=700&q=80" alt="Makeup products">
+            <img src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=700&q=80" alt="Nail art">
+            <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=700&q=80" alt="Salon beauty treatment">
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="section-heading">
+            <small>Customer Experiences</small>
+            <h2>What Our Customers Say</h2>
+            <p>We believe every customer deserves an exceptional experience.</p>
+        </div>
+
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"A beautiful experience! The atmosphere is welcoming and the service is amazing."</p>
+                <h4>Happy Customer</h4>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"I loved the attention to detail. I left feeling confident and looking amazing."</p>
+                <h4>Satisfied Client</h4>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"Professional service and a lovely environment. Definitely worth visiting."</p>
+                <h4>Valued Customer</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING CALL TO ACTION -->
+    <section class="booking-banner">
+        <h2>Ready for a New Look?</h2>
+        <p>Your beauty journey starts here. Book your appointment today.</p>
+        <a href="booking.html" class="btn">Book an Appointment</a>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+
+        <div class="section-heading">
+            <small>Get In Touch</small>
+            <h2>Visit Looks Salon</h2>
+            <p>We would love to welcome you. Get in touch or visit us today.</p>
+        </div>
+
+        <div class="contact-grid">
+
+            <!-- LOCATION -->
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <h3>Our Location</h3>
+
+                <p>
+                    Embakasi District<br>
+                    Nairobi, Kenya
+                </p>
+
+                <a
+                    href="https://www.google.com/maps/search/?api=1&query=Embakasi%2C+Nairobi%2C+Kenya"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-action">
+                    Get Directions
+                </a>
+            </div>
+
+            <!-- PHONE AND EMAIL -->
+            <div class="contact-item">
+                <div class="contact-icon">📞</div>
+                <h3>Contact Us</h3>
+
+                <p>
+                    Phone:<br>
+                    <a href="tel:+254115482233">0115482233</a>
+
+                    <br><br>
+
+                    Email:<br>
+                    <a href="mailto:lookssalon@gmail.com">
+                        lookssalon@gmail.com
+                    </a>
+                </p>
+
+                <a
+                    href="https://wa.me/254115482233"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-action">
+                    Chat on WhatsApp
+                </a>
+            </div>
+
+            <!-- OPENING HOURS -->
+            <div class="contact-item">
+                <div class="contact-icon">🕒</div>
+                <h3>Opening Hours</h3>
+
+                <p>
+    Monday – Saturday<br>
+    7:00 AM – 6:00 PM<br><br>
+    Sunday: Closed
+</p>
+            </div>
+
+        </div>
+
+        <!-- GOOGLE MAP -->
+        <div class="contact-map">
+            <iframe
+                src="https://maps.google.com/maps?q=Embakasi%2C%20Nairobi%2C%20Kenya&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Looks Salon location in Embakasi, Nairobi">
+            </iframe>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="logo">Looks Salon.</div>
+
+        <p>
+            Beauty. Elegance. Confidence.<br>
+            © <span id="year"></span> Looks Salon. All Rights Reserved.
+        </p>
+
+        <div style="margin-top: 15px;">
+            <a href="customer/login.html" class="admin-link">
+                Customer Login
+            </a>
+
+            <span style="color: #d7c6ce; margin: 0 8px;">|</span>
+
+            <a href="customer/register.html" class="admin-link">
+                Create Account
+            </a>
+
+            <span style="color: #d7c6ce; margin: 0 8px;">|</span>
+
+            <a href="admin/login.html" class="admin-link">
+                Admin Login
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", function() {
+            navLinks.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", function() {
+                navLinks.classList.remove("active");
+            });
+        });
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

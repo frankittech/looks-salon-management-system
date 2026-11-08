@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8d7e8, #f3a6cc);
+        }
+
+        .login-container {
+            background: white;
+            width: 380px;
+            max-width: 92%;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .login-container h1 {
+            text-align: center;
+            color: #d63384;
+            margin-bottom: 8px;
+        }
+
+        .login-container p {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #d63384;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #d63384;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b8256d;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h1>LOOKS SALON</h1>
+        <p>Administrator Login</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username"
+                       placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password"
+                       placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" id="loginButton">
+                Login
+            </button>
+
+            <div id="message"></div>
+        </form>
+    </div>
+
+    <script>
+        
+const API_URL = "http://127.0.0.1:3000/api";
+
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message");
+    const button = document.getElementById("loginButton");
+
+    message.style.color = "red";
+    message.textContent = "";
+    button.disabled = true;
+    button.textContent = "Logging in...";
+
+    try {
+        const response = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+    throw new Error(data.message || "Login failed.");
+}
+
+message.style.color = "green";
+message.textContent = "Login successful!";
+
+window.location.assign(
+    new URL("admin.html", window.location.href).href
+);
+    } catch (error) {
+        message.textContent = error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "Login";
+    }
+});
+
+    </script>
+
+</body>
+</html>

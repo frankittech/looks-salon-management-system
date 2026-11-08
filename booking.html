@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment | Looks Salon</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #fff7f9;
+            color: #33252d;
+        }
+
+        :root {
+            --pink: #d65b83;
+            --dark-pink: #a83d65;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 27px;
+            font-weight: 700;
+            color: var(--dark-pink);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #33252d;
+        }
+
+        .back-link {
+            color: var(--dark-pink);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #a83d65, #e98cac);
+            padding: 65px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 43px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #ffeaf1;
+            line-height: 1.7;
+        }
+
+        .booking-container {
+            max-width: 720px;
+            margin: -35px auto 70px;
+            background: white;
+            padding: 38px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.09);
+            position: relative;
+        }
+
+        .booking-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 29px;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #81717a;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #eadde3;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(214,91,131,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .service-details {
+            background: #fff1f5;
+            padding: 15px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .service-details strong {
+            color: var(--dark-pink);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--pink);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--dark-pink);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #message {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #message.success {
+            display: block;
+            background: #e9f8ee;
+            color: #236b3c;
+        }
+
+        #message.error {
+            display: block;
+            background: #fff0f0;
+            color: #a42e3b;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 20px;
+            color: #81717a;
+            font-size: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #30212a;
+            color: #e9dce2;
+            font-size: 13px;
+        }
+
+        @media(max-width: 600px) {
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .booking-container {
+                margin: -25px 15px 50px;
+                padding: 25px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">Looks<span>Salon.</span></a>
+    <a href="index.html" class="back-link">← Back to Home</a>
+</header>
+
+<section class="hero">
+    <h1>Book Your Appointment</h1>
+    <p>Take the first step towards your beautiful new look.</p>
+</section>
+
+<main class="booking-container">
+
+    <h2>Appointment Details</h2>
+
+    <p class="intro">
+        Complete the form below to request an appointment.
+        Our salon team will review and confirm your booking.
+    </p>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <form id="bookingForm">
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" required maxlength="100"
+                       placeholder="Enter your full name">
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" required maxlength="20"
+                       placeholder="Enter your phone number">
+            </div>
+
+            <div class="field full-width">
+                <label for="email">Email Address (Optional)</label>
+                <input type="email" id="email" maxlength="150"
+                       placeholder="Enter your email address">
+            </div>
+
+            <div class="field full-width">
+                <label for="service">Choose a Service *</label>
+                <select id="service" required>
+                    <option value="">Loading services...</option>
+                </select>
+            </div>
+
+            <div class="field full-width">
+                <div class="service-details" id="serviceDetails">
+                    <p><strong>Service:</strong> <span id="selectedName"></span></p>
+                    <p><strong>Price:</strong> KES <span id="selectedPrice"></span></p>
+                    <p><strong>Duration:</strong> <span id="selectedDuration"></span> minutes</p>
+                </div>
+            </div>
+
+            <div class="field full-width">
+                <label for="appointmentDate">Preferred Date and Time *</label>
+                <input type="datetime-local" id="appointmentDate" required>
+            </div>
+
+            <div class="field full-width">
+                <label for="notes">Additional Notes (Optional)</label>
+                <textarea id="notes" maxlength="1000"
+                    placeholder="Tell us anything we should know about your appointment..."></textarea>
+            </div>
+
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitButton">
+            Submit Booking Request
+        </button>
+
+    </form>
+
+    <p class="note">
+        Your booking will remain pending until confirmed by Looks Salon.
+    </p>
+
+</main>
+
+<footer>
+    © <span id="year"></span> Looks Salon. All Rights Reserved.
+</footer>
+
+<script>
+    // Use the same host as your Live Server frontend.
+    const API_URL = 'http://127.0.0.1:3000/api';
+
+    const form = document.getElementById('bookingForm');
+    const serviceSelect = document.getElementById('service');
+    const message = document.getElementById('message');
+    const submitButton = document.getElementById('submitButton');
+
+    let services = [];
+
+    document.getElementById('year').textContent =
+        new Date().getFullYear();
+
+    // Set the earliest selectable date and time to now.
+    function setMinimumDate() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+
+        document.getElementById('appointmentDate').min =
+            now.toISOString().slice(0, 16);
+    }
+
+    setMinimumDate();
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = type;
+    }
+
+    // Load available salon services from the backend.
+    async function loadServices() {
+        try {
+            const response = await fetch(`${API_URL}/public/services`);
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Could not load services.');
+            }
+
+            services = data;
+
+            serviceSelect.innerHTML =
+                '<option value="">Select a salon service</option>';
+
+            if (services.length === 0) {
+                serviceSelect.innerHTML =
+                    '<option value="">No services currently available</option>';
+                return;
+            }
+
+            services.forEach(service => {
+                const option = document.createElement('option');
+
+                option.value = service.id;
+                option.textContent =
+                    `${service.name} — KES ${Number(service.price).toLocaleString('en-KE')}`;
+
+                serviceSelect.appendChild(option);
+            });
+
+        } catch (error) {
+            serviceSelect.innerHTML =
+                '<option value="">Unable to load services</option>';
+
+            showMessage(
+                error.message + ' Please check that the backend server is running.',
+                'error'
+            );
+        }
+    }
+
+    // Display selected service information.
+    serviceSelect.addEventListener('change', function() {
+        const selectedService = services.find(
+            service => String(service.id) === this.value
+        );
+
+        const details = document.getElementById('serviceDetails');
+
+        if (!selectedService) {
+            details.style.display = 'none';
+            return;
+        }
+
+        document.getElementById('selectedName').textContent =
+            selectedService.name;
+
+        document.getElementById('selectedPrice').textContent =
+            Number(selectedService.price).toLocaleString('en-KE');
+
+        document.getElementById('selectedDuration').textContent =
+            selectedService.duration_minutes;
+
+        details.style.display = 'block';
+    });
+
+    // Submit the customer booking.
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        message.className = '';
+        message.textContent = '';
+
+        const appointmentDate =
+            document.getElementById('appointmentDate').value;
+
+        if (new Date(appointmentDate).getTime() <= Date.now()) {
+            showMessage(
+                'Please select a future appointment date and time.',
+                'error'
+            );
+            return;
+        }
+
+        const booking = {
+            name: document.getElementById('name').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            email: document.getElementById('email').value.trim() || null,
+            service_id: Number(serviceSelect.value),
+            appointment_date: appointmentDate.replace('T', ' ') + ':00',
+            notes: document.getElementById('notes').value.trim() || null
+        };
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting Booking...';
+
+        try {
+            const response = await fetch(`${API_URL}/public/bookings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(booking)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Booking could not be submitted.');
+            }
+
+            form.reset();
+
+            document.getElementById('serviceDetails').style.display = 'none';
+
+            setMinimumDate();
+
+            showMessage(
+                `Thank you! Your booking request has been submitted successfully. Your booking reference is #${data.booking_id}. Your appointment is pending confirmation by Looks Salon.`,
+                'success'
+            );
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Booking Request';
+        }
+    });
+
+    loadServices();
+</script>
+
+</body>
+</html>

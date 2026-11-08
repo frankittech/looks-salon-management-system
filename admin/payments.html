@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looks Salon | Payments</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f5f7;
+            color: #333;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            background: #351c2d;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            color: #f5b6d2;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 13px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #a64d79;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #642d4b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #777;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000d;
+        }
+
+        .stat-card h3 {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card p {
+            font-size: 23px;
+            font-weight: bold;
+            color: #8b3f65;
+            overflow-wrap: anywhere;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px #0000000d;
+        }
+
+        .panel h2 {
+            color: #642d4b;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            background: #9b4771;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.88;
+        }
+
+        .submit-btn {
+            margin-top: 18px;
+            padding: 12px 22px;
+        }
+
+        .cancel-btn {
+            background: #777;
+            margin-left: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 13px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8edf3;
+            color: #642d4b;
+        }
+
+        .status {
+            padding: 6px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .pending {
+            background: #fff1ce;
+            color: #936600;
+        }
+
+        .completed {
+            background: #d9f3e3;
+            color: #187443;
+        }
+
+        .failed {
+            background: #ffe0e0;
+            color: #a32929;
+        }
+
+        .refunded {
+            background: #dceaff;
+            color: #24569a;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .complete-btn {
+            background: #23834e;
+        }
+
+        .delete-btn {
+            background: #c43d4b;
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: #c62828;
+        }
+
+        @media(max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .sidebar h2 {
+                margin-bottom: 15px;
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Looks Salon</h2>
+
+        <a href="admin.html">Dashboard</a>
+        <a href="customers.html">Customers</a>
+        <a href="services.html">Services</a>
+        <a href="staff.html">Staff</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="payments.html" class="active">Payments</a>
+    </aside>
+
+    <main class="main">
+
+        <div class="header">
+            <h1>Payments Management</h1>
+            <p>Record, monitor and manage salon customer payments.</p>
+        </div>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Total Payments</h3>
+                <p id="totalPayments">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Collected</h3>
+                <p id="totalCollected">KSh 0.00</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending Payments</h3>
+                <p id="pendingPayments">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Failed Payments</h3>
+                <p id="failedPayments">0</p>
+            </div>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>Record New Payment</h2>
+
+            <form id="paymentForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="appointment">Select Appointment</label>
+                        <select id="appointment" required>
+                            <option value="">Loading appointments...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount (KSh)</label>
+                        <input type="number" id="amount" min="0.01" step="0.01" required placeholder="Enter payment amount">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="">Select payment method</option>
+                            <option value="mpesa">M-Pesa</option>
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionReference">Transaction Reference (Optional)</label>
+                        <input type="text" id="transactionReference" maxlength="100" placeholder="e.g. M-Pesa transaction code">
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="paymentStatus">Payment Status</label>
+                        <select id="paymentStatus" required>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Record Payment
+                </button>
+
+                <button type="button" class="cancel-btn" id="cancelEditBtn" style="display:none;">
+                    Cancel Edit
+                </button>
+
+                <p id="formMessage" class="message"></p>
+
+            </form>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>All Payments</h2>
+
+            <div class="form-group" style="max-width:300px; margin-bottom:18px;">
+                <label for="searchInput">Search Payments</label>
+                <input type="text" id="searchInput" placeholder="Search customer, method or reference...">
+            </div>
+
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Appointment</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Reference</th>
+                            <th>Status</th>
+                            <th>Paid At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="paymentsTable">
+                        <tr>
+                            <td colspan="9">Loading payments...</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    const API = "http://localhost:3000/api";
+
+    let payments = [];
+    let appointments = [];
+    let editingId = null;
+
+    const form = document.getElementById("paymentForm");
+    const appointmentSelect = document.getElementById("appointment");
+    const amountInput = document.getElementById("amount");
+    const methodInput = document.getElementById("paymentMethod");
+    const referenceInput = document.getElementById("transactionReference");
+    const statusInput = document.getElementById("paymentStatus");
+    const table = document.getElementById("paymentsTable");
+    const message = document.getElementById("formMessage");
+
+    async function apiRequest(endpoint, options = {}) {
+        const response = await fetch(API + endpoint, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            }
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(data.error || data.message || "Request failed.");
+        }
+
+        return data;
+    }
+
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[character]);
+    }
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message " + type;
+    }
+
+    function money(value) {
+        return "KSh " + Number(value || 0).toLocaleString("en-KE", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    async function loadAppointments() {
+        appointments = await apiRequest("/appointments");
+
+        appointmentSelect.innerHTML =
+            '<option value="">Select an appointment</option>';
+
+        appointments.forEach(appointment => {
+            const date = new Date(appointment.appointment_date);
+            const dateText = Number.isNaN(date.getTime())
+                ? appointment.appointment_date
+                : date.toLocaleString();
+
+            const label =
+                `#${appointment.id} - ${appointment.customer_name} - ${appointment.service_name} - ${dateText}`;
+
+            appointmentSelect.innerHTML +=
+                `<option value="${appointment.id}">${escapeHTML(label)}</option>`;
+        });
+    }
+
+    async function loadPayments() {
+        try {
+            payments = await apiRequest("/payments");
+            displayPayments(payments);
+            updateStatistics();
+        } catch (error) {
+            table.innerHTML =
+                `<tr><td colspan="9">${escapeHTML(error.message)}</td></tr>`;
+        }
+    }
+
+    function displayPayments(records) {
+        if (!records.length) {
+            table.innerHTML =
+                '<tr><td colspan="9">No payments found.</td></tr>';
+            return;
+        }
+
+        table.innerHTML = "";
+
+        records.forEach(payment => {
+            const status = String(payment.status || "pending").toLowerCase();
+
+            const date = payment.paid_at
+                ? new Date(payment.paid_at).toLocaleString()
+                : "-";
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${payment.id}</td>
+                <td>#${payment.appointment_id}</td>
+                <td>${escapeHTML(payment.customer_name || "-")}</td>
+                <td>${money(payment.amount)}</td>
+                <td>${escapeHTML(payment.payment_method || "-").toUpperCase()}</td>
+                <td>${escapeHTML(payment.transaction_reference || "-")}</td>
+                <td><span class="status ${status}">${escapeHTML(status)}</span></td>
+                <td>${escapeHTML(date)}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="complete-btn" data-action="edit" data-id="${payment.id}">Edit</button>
+                        <button class="delete-btn" data-action="delete" data-id="${payment.id}">Delete</button>
+                    </div>
+                </td>
+            `;
+
+            table.appendChild(row);
+        });
+    }
+
+    function updateStatistics() {
+        const collected = payments
+            .filter(payment => payment.status === "completed")
+            .reduce((sum, payment) => sum + Number(payment.amount), 0);
+
+        document.getElementById("totalPayments").textContent = payments.length;
+        document.getElementById("totalCollected").textContent = money(collected);
+
+        document.getElementById("pendingPayments").textContent =
+            payments.filter(payment => payment.status === "pending").length;
+
+        document.getElementById("failedPayments").textContent =
+            payments.filter(payment => payment.status === "failed").length;
+    }
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const payload = {
+            appointment_id: Number(appointmentSelect.value),
+            amount: Number(amountInput.value),
+            payment_method: methodInput.value,
+            transaction_reference: referenceInput.value.trim() || null,
+            status: statusInput.value
+        };
+
+        try {
+            if (editingId) {
+                await apiRequest(`/payments/${editingId}`, {
+                    method: "PATCH",
+                    body: JSON.stringify(payload)
+                });
+
+                showMessage("Payment updated successfully.", "success");
+            } else {
+                await apiRequest("/payments", {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+
+                showMessage("Payment recorded successfully.", "success");
+            }
+
+            resetForm();
+            await loadPayments();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    });
+
+    table.addEventListener("click", async function(event) {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+
+        const id = Number(button.dataset.id);
+
+        if (button.dataset.action === "edit") {
+            editPayment(id);
+        }
+
+        if (button.dataset.action === "delete") {
+            deletePayment(id);
+        }
+    });
+
+    function editPayment(id) {
+        const payment = payments.find(p => Number(p.id) === id);
+        if (!payment) return;
+
+        editingId = id;
+
+        appointmentSelect.value = payment.appointment_id;
+        amountInput.value = payment.amount;
+        methodInput.value = payment.payment_method;
+        referenceInput.value = payment.transaction_reference || "";
+        statusInput.value = payment.status;
+
+        document.querySelector(".panel h2").textContent = "Edit Payment";
+        document.getElementById("submitBtn").textContent = "Update Payment";
+        document.getElementById("cancelEditBtn").style.display = "inline-block";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deletePayment(id) {
+        if (!confirm("Are you sure you want to delete this payment?")) return;
+
+        try {
+            await apiRequest(`/payments/${id}`, {
+                method: "DELETE"
+            });
+
+            await loadPayments();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    function resetForm() {
+        form.reset();
+        editingId = null;
+
+        document.querySelector(".panel h2").textContent = "Record New Payment";
+        document.getElementById("submitBtn").textContent = "Record Payment";
+        document.getElementById("cancelEditBtn").style.display = "none";
+    }
+
+    document.getElementById("cancelEditBtn").addEventListener("click", resetForm);
+
+    document.getElementById("searchInput").addEventListener("input", function() {
+        const term = this.value.toLowerCase();
+
+        const filtered = payments.filter(payment =>
+            String(payment.customer_name || "").toLowerCase().includes(term) ||
+            String(payment.payment_method || "").toLowerCase().includes(term) ||
+            String(payment.transaction_reference || "").toLowerCase().includes(term) ||
+            String(payment.status || "").toLowerCase().includes(term)
+        );
+
+        displayPayments(filtered);
+    });
+
+    async function initializePage() {
+        try {
+            await loadAppointments();
+            await loadPayments();
+        } catch (error) {
+            showMessage("Unable to load data: " + error.message, "error");
+        }
+    }
+
+    initializePage();
+</script>
+
+</body>
+</html>

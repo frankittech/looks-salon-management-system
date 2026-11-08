@@ -1,0 +1,1186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Looks Salon | Admin Dashboard</title>
+
+  <style>
+    :root {
+      --pink:#c04478;
+      --dark:#241923;
+      --bg:#f8f5f7;
+      --muted:#746a73;
+      --white:#fff;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:var(--bg);
+      color:#29222a;
+      visibility:hidden;
+    }
+
+    .layout {
+      display:grid;
+      grid-template-columns:230px 1fr;
+      min-height:100vh;
+    }
+
+    aside {
+      background:var(--dark);
+      color:white;
+      padding:24px 16px;
+    }
+
+    .brand {
+      font-size:22px;
+      font-weight:800;
+      margin:0 0 30px;
+    }
+
+    .brand span { color:#f19ac0; }
+
+    nav button {
+      width:100%;
+      text-align:left;
+      border:0;
+      padding:12px 14px;
+      margin:4px 0;
+      border-radius:9px;
+      color:#eadfe7;
+      background:transparent;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    nav button.active,
+    nav button:hover {
+      background:#503146;
+      color:white;
+    }
+
+    main {
+      padding:28px;
+      min-width:0;
+    }
+
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:24px;
+    }
+
+    h1 { margin:0 0 5px; font-size:27px; }
+
+    .muted {
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .primary {
+      background:var(--pink);
+      color:white;
+      border:0;
+      border-radius:8px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .logout-btn {
+      background:#fee9eb;
+      color:#a42e3b;
+      border:0;
+      border-radius:8px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .header-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(130px,1fr));
+      gap:15px;
+      margin-bottom:24px;
+    }
+
+    .card {
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+
+    .card:hover {
+      transform:translateY(-3px);
+      box-shadow:0 7px 22px #39233416;
+    }
+
+    .activity-list p {
+      padding:10px 0;
+      margin:0;
+      border-bottom:1px solid #eee6ec;
+    }
+
+    .activity-list p:last-child { border-bottom:0; }
+
+    .dashboard-panels {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+    }
+
+    .card,.panel {
+      background:white;
+      border-radius:13px;
+      padding:18px;
+      box-shadow:0 4px 18px #3923340b;
+    }
+
+    .card small { color:var(--muted); }
+
+    .metric {
+      font-size:28px;
+      font-weight:800;
+      margin-top:10px;
+    }
+
+    .panel { margin-bottom:20px; }
+
+    .panel h2 {
+      font-size:18px;
+      margin:0 0 16px;
+    }
+
+    .toolbar {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    input,select,textarea {
+      width:100%;
+      padding:10px;
+      border:1px solid #e2d8df;
+      border-radius:7px;
+      font:inherit;
+      background:white;
+    }
+
+    .toolbar input { max-width:320px; }
+
+    .form-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    label {
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    .field { margin-bottom:12px; }
+
+    .table-wrap { overflow-x:auto; }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:650px;
+    }
+
+    th,td {
+      padding:12px 10px;
+      text-align:left;
+      border-bottom:1px solid #eee6ec;
+      font-size:13px;
+    }
+
+    th {
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .status {
+      display:inline-block;
+      border-radius:20px;
+      padding:5px 8px;
+      background:#f7e6ef;
+      color:#9a2c60;
+      font-size:12px;
+    }
+
+    .secondary {
+      background:#f0e8ed;
+      color:#493340;
+      border:0;
+      border-radius:7px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+
+    .danger {
+      background:#fee9eb;
+      color:#a42e3b;
+      border:0;
+      border-radius:7px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+
+    .hidden { display:none !important; }
+
+    .notice {
+      padding:12px;
+      border-radius:8px;
+      margin-bottom:14px;
+      background:#fff3cd;
+      color:#755b11;
+    }
+
+    #message {
+      margin-bottom:12px;
+      font-size:14px;
+    }
+
+    @media(max-width:900px) {
+      .layout { grid-template-columns:1fr; }
+      aside { padding:15px; }
+      nav { display:flex; overflow:auto; }
+      nav button {
+        min-width:max-content;
+        width:auto;
+      }
+      .cards { grid-template-columns:repeat(2,1fr); }
+      main { padding:18px; }
+      .dashboard-panels { grid-template-columns:1fr; }
+    }
+
+    @media(max-width:520px) {
+      .cards,.form-grid { grid-template-columns:1fr; }
+      header {
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <aside>
+    <div class="brand">Looks <span>Salon</span></div>
+
+    <nav>
+      <button class="active" data-page="dashboard">Dashboard</button>
+      <button data-page="customers">Customers</button>
+      <button data-page="services">Services</button>
+      <button data-page="appointments">Appointments</button>
+      <button data-page="payments">Payments</button>
+    </nav>
+  </aside>
+
+  <main>
+
+    <header>
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="muted">Manage your salon in one place.</div>
+      </div>
+
+      <div class="header-actions">
+        <button class="primary" id="refreshBtn">Refresh data</button>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <div id="message" role="status"></div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page">
+
+      <div class="cards">
+
+        <div class="card">
+          <small>Total customers</small>
+          <div class="metric" id="customerCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Active services</small>
+          <div class="metric" id="serviceCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Total appointments</small>
+          <div class="metric" id="appointmentCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Completed revenue (KES)</small>
+          <div class="metric" id="paymentTotal">—</div>
+        </div>
+
+        <div class="card">
+          <small>Active staff</small>
+          <div class="metric" id="staffCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Pending appointments</small>
+          <div class="metric" id="pendingCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Confirmed appointments</small>
+          <div class="metric" id="confirmedCount">—</div>
+        </div>
+
+        <div class="card">
+          <small>Completed appointments</small>
+          <div class="metric" id="completedCount">—</div>
+        </div>
+
+      </div>
+
+      <div class="dashboard-panels">
+
+        <div class="panel">
+          <h2>Recent appointments</h2>
+          <div id="recentAppointments" class="muted activity-list">
+            Loading appointments...
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Recent payments</h2>
+          <div id="recentPayments" class="muted activity-list">
+            Loading payments...
+          </div>
+        </div>
+
+      </div>
+
+      <div class="notice">
+        Administrator dashboard. Ensure your backend API routes are protected
+        before deploying publicly.
+      </div>
+
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section id="customers" class="page hidden">
+
+      <div class="panel">
+        <h2>Add customer</h2>
+
+        <form id="customerForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="customerName">Full name</label>
+              <input id="customerName" required maxlength="120">
+            </div>
+
+            <div class="field">
+              <label for="customerPhone">Phone</label>
+              <input id="customerPhone" required maxlength="30">
+            </div>
+
+            <div class="field">
+              <label for="customerEmail">Email (optional)</label>
+              <input id="customerEmail" type="email" maxlength="150">
+            </div>
+
+          </div>
+
+          <button class="primary">Save customer</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Customer list</h2>
+        <div class="toolbar">
+          <input id="customerSearch" placeholder="Search name, phone or email">
+        </div>
+        <div id="customersTable" class="table-wrap"></div>
+      </div>
+
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="page hidden">
+
+      <div class="panel">
+        <h2>Add salon service</h2>
+
+        <form id="serviceForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="serviceName">Service name</label>
+              <input id="serviceName" required maxlength="120" placeholder="e.g. Knotless braids">
+            </div>
+
+            <div class="field">
+              <label for="servicePrice">Price (KES)</label>
+              <input id="servicePrice" required type="number" min="0" step="0.01">
+            </div>
+
+            <div class="field">
+              <label for="serviceDuration">Duration (minutes)</label>
+              <input id="serviceDuration" required type="number" min="5" max="600" value="60">
+            </div>
+
+            <div class="field">
+              <label for="serviceDescription">Description</label>
+              <input id="serviceDescription" maxlength="500">
+            </div>
+
+          </div>
+
+          <button class="primary">Save service</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Services offered</h2>
+        <div id="servicesTable" class="table-wrap"></div>
+      </div>
+
+    </section>
+
+    <!-- APPOINTMENTS -->
+    <section id="appointments" class="page hidden">
+
+      <div class="panel">
+        <h2>Create appointment</h2>
+
+        <form id="appointmentForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="bookingCustomer">Customer</label>
+              <select id="bookingCustomer" required></select>
+            </div>
+
+            <div class="field">
+              <label for="bookingService">Service</label>
+              <select id="bookingService" required></select>
+            </div>
+
+            <div class="field">
+              <label for="bookingDate">Date and time</label>
+              <input id="bookingDate" type="datetime-local" required>
+            </div>
+
+            <div class="field">
+              <label for="bookingNotes">Notes (optional)</label>
+              <input id="bookingNotes" maxlength="500">
+            </div>
+
+          </div>
+
+          <button class="primary">Create appointment</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Appointments</h2>
+        <div id="appointmentsTable" class="table-wrap"></div>
+      </div>
+
+    </section>
+
+    <!-- PAYMENTS -->
+    <section id="payments" class="page hidden">
+
+      <div class="panel">
+        <h2>Record payment or deposit</h2>
+
+        <form id="paymentForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="paymentAppointment">Appointment</label>
+              <select id="paymentAppointment" required></select>
+            </div>
+
+            <div class="field">
+              <label for="paymentAmount">Amount (KES)</label>
+              <input id="paymentAmount" type="number" min="0.01" step="0.01" required>
+            </div>
+
+            <div class="field">
+              <label for="paymentMethod">Method</label>
+              <select id="paymentMethod" required>
+                <option value="mpesa">M-Pesa</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="bank">Bank transfer</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="paymentStatus">Payment status</label>
+              <select id="paymentStatus" required>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+                <option value="refunded">Refunded</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="paymentReference">Transaction reference (optional)</label>
+              <input id="paymentReference" maxlength="100">
+            </div>
+
+          </div>
+
+          <button class="primary">Record payment</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Payment records</h2>
+        <div id="paymentsTable" class="table-wrap"></div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+'use strict';
+
+const API = "http://127.0.0.1:3000/api";
+
+let customers = [];
+let services = [];
+let appointments = [];
+let payments = [];
+let staff = [];
+
+let redirectingToLogin = false;
+
+const $ = id => document.getElementById(id);
+
+const esc = value =>
+  String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+
+const money = value =>
+  Number(value || 0).toLocaleString('en-KE', {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+
+function notify(text, error=false) {
+  $('message').textContent = text;
+  $('message').style.color = error ? '#b42318' : '#287a43';
+}
+
+/* AUTHENTICATION REDIRECT */
+function redirectToLogin() {
+  if (redirectingToLogin) return;
+
+  redirectingToLogin = true;
+  window.location.replace('login.html');
+}
+
+/* CHECK ADMIN SESSION BEFORE DISPLAYING DASHBOARD */
+async function checkAdminAccess() {
+  try {
+    const response = await fetch(`${API}/auth/status`, {
+      method:'GET',
+      credentials:'include'
+    });
+
+    if (response.status === 401 || !response.ok) {
+      redirectToLogin();
+      return false;
+    }
+
+    const data = await response.json();
+
+    if (!data.authenticated) {
+      redirectToLogin();
+      return false;
+    }
+
+    document.body.style.visibility = 'visible';
+
+    return true;
+
+  } catch (error) {
+    console.error('Authentication check failed:', error);
+    redirectToLogin();
+    return false;
+  }
+}
+
+/* COMMON API REQUEST FUNCTION */
+async function request(path, options={}) {
+
+  const response = await fetch(API + path, {
+    credentials:'include',
+    headers:{
+      'Content-Type':'application/json',
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  const data = await response.json().catch(() => ({
+    message:'Unexpected server response'
+  }));
+
+  if (response.status === 401) {
+    redirectToLogin();
+    throw new Error('Your session has expired. Please log in again.');
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Request failed');
+  }
+
+  return data;
+}
+
+/* TABLE GENERATOR */
+function table(headers, rows) {
+
+  if (!rows.length) {
+    return '<p class="muted">No records found yet.</p>';
+  }
+
+  return `
+    <table>
+      <thead>
+        <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+      </thead>
+      <tbody>${rows.join('')}</tbody>
+    </table>
+  `;
+}
+
+/* PAGE NAVIGATION */
+function showPage(page) {
+
+  document.querySelectorAll('.page').forEach(el => {
+    el.classList.toggle('hidden', el.id !== page);
+  });
+
+  document.querySelectorAll('nav button').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+
+  $('pageTitle').textContent =
+    page.charAt(0).toUpperCase() + page.slice(1);
+}
+
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => showPage(btn.dataset.page));
+});
+
+/* LOAD ALL DASHBOARD DATA */
+async function loadAll() {
+
+  try {
+
+    [
+      customers,
+      services,
+      appointments,
+      payments,
+      staff
+    ] = await Promise.all([
+      request('/customers'),
+      request('/services'),
+      request('/appointments'),
+      request('/payments'),
+      request('/staff')
+    ]);
+
+    renderAll();
+
+    notify('Dashboard data refreshed successfully.');
+
+  } catch (e) {
+
+    if (!redirectingToLogin) {
+      notify(
+        e.message + ' — check that MySQL and the backend server are running, and confirm all API routes are available.',
+        true
+      );
+    }
+
+  }
+}
+
+/* DISPLAY DASHBOARD DATA */
+function renderAll() {
+
+  $('customerCount').textContent = customers.length;
+
+  $('serviceCount').textContent =
+    services.filter(s => Number(s.is_active) === 1).length;
+
+  $('appointmentCount').textContent = appointments.length;
+
+  $('staffCount').textContent =
+    staff.filter(s => Number(s.is_active) === 1).length;
+
+  $('pendingCount').textContent =
+    appointments.filter(a => a.status === 'pending').length;
+
+  $('confirmedCount').textContent =
+    appointments.filter(a => a.status === 'confirmed').length;
+
+  $('completedCount').textContent =
+    appointments.filter(a => a.status === 'completed').length;
+
+  const completedRevenue = payments
+    .filter(p => p.status === 'completed')
+    .reduce((sum,p) => sum + Number(p.amount),0);
+
+  $('paymentTotal').textContent = money(completedRevenue);
+
+  /* CUSTOMERS TABLE */
+  $('customersTable').innerHTML = table(
+    ['Name','Phone','Email','Action'],
+
+    customers.map(c => `
+      <tr>
+        <td>${esc(c.name)}</td>
+        <td>${esc(c.phone)}</td>
+        <td>${esc(c.email || '—')}</td>
+        <td>
+          <button class="danger" onclick="deleteCustomer(${Number(c.id)})">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `)
+  );
+
+  /* SERVICES TABLE */
+  $('servicesTable').innerHTML = table(
+    ['Service','Price (KES)','Duration','Description','Status','Action'],
+
+    services.map(s => `
+      <tr>
+        <td>${esc(s.name)}</td>
+        <td>${money(s.price)}</td>
+        <td>${esc(s.duration_minutes)} min</td>
+        <td>${esc(s.description || '—')}</td>
+        <td>${Number(s.is_active) === 1 ? 'Active' : 'Inactive'}</td>
+        <td>
+          <button class="danger" onclick="deleteService(${Number(s.id)})">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `)
+  );
+
+  /* APPOINTMENTS TABLE */
+  $('appointmentsTable').innerHTML = table(
+    ['Customer','Service','Date','Status','Action'],
+
+    appointments.map(a => `
+      <tr>
+        <td>${esc(a.customer_name)}</td>
+        <td>${esc(a.service_name)}</td>
+        <td>${esc(new Date(a.appointment_date).toLocaleString())}</td>
+        <td><span class="status">${esc(a.status)}</span></td>
+        <td>
+          <button class="secondary"
+            onclick="changeAppointment(${Number(a.id)},'confirmed')">
+            Confirm
+          </button>
+
+          <button class="danger"
+            onclick="changeAppointment(${Number(a.id)},'cancelled')">
+            Cancel
+          </button>
+        </td>
+      </tr>
+    `)
+  );
+
+  /* PAYMENTS TABLE */
+  $('paymentsTable').innerHTML = table(
+    ['Customer','Service','Amount (KES)','Method','Status','Reference','Date'],
+
+    payments.map(p => `
+      <tr>
+        <td>${esc(p.customer_name)}</td>
+        <td>${esc(p.service_name)}</td>
+        <td>${money(p.amount)}</td>
+        <td>${esc(p.payment_method)}</td>
+        <td><span class="status">${esc(p.status)}</span></td>
+        <td>${esc(p.transaction_reference || '—')}</td>
+        <td>
+          ${p.created_at
+            ? esc(new Date(p.created_at).toLocaleString())
+            : '—'}
+        </td>
+      </tr>
+    `)
+  );
+
+  /* RECENT APPOINTMENTS */
+  const recentAppointments = [...appointments]
+    .sort((a,b) =>
+      new Date(b.appointment_date) - new Date(a.appointment_date)
+    )
+    .slice(0,5);
+
+  $('recentAppointments').innerHTML =
+    recentAppointments.map(a => `
+      <p>
+        <strong>${esc(a.customer_name)}</strong> —
+        ${esc(a.service_name)}
+        <br>
+        <span class="muted">
+          ${esc(new Date(a.appointment_date).toLocaleString())}
+          · ${esc(a.status)}
+        </span>
+      </p>
+    `).join('') || '<p>No appointments yet.</p>';
+
+  /* RECENT PAYMENTS */
+  const recentPayments = [...payments]
+    .sort((a,b) =>
+      new Date(b.created_at || 0) - new Date(a.created_at || 0)
+    )
+    .slice(0,5);
+
+  $('recentPayments').innerHTML =
+    recentPayments.map(p => `
+      <p>
+        <strong>${esc(p.customer_name || 'Customer')}</strong> —
+        KES ${money(p.amount)}
+        <br>
+        <span class="muted">
+          ${esc(p.payment_method)} · ${esc(p.status)}
+        </span>
+      </p>
+    `).join('') || '<p>No payments yet.</p>';
+
+  /* CUSTOMER DROPDOWN */
+  $('bookingCustomer').innerHTML =
+    '<option value="">Select customer</option>' +
+    customers.map(c => `
+      <option value="${Number(c.id)}">
+        ${esc(c.name)} (${esc(c.phone)})
+      </option>
+    `).join('');
+
+  /* SERVICE DROPDOWN */
+  $('bookingService').innerHTML =
+    '<option value="">Select service</option>' +
+    services
+      .filter(s => Number(s.is_active) === 1)
+      .map(s => `
+        <option value="${Number(s.id)}">
+          ${esc(s.name)} — KES ${money(s.price)}
+        </option>
+      `).join('');
+
+  /* APPOINTMENT DROPDOWN */
+  $('paymentAppointment').innerHTML =
+    '<option value="">Select appointment</option>' +
+    appointments
+      .filter(a => a.status !== 'cancelled')
+      .map(a => `
+        <option value="${Number(a.id)}">
+          #${Number(a.id)} — ${esc(a.customer_name)} / ${esc(a.service_name)}
+        </option>
+      `).join('');
+}
+
+/* ADD CUSTOMER */
+$('customerForm').addEventListener('submit', async e => {
+
+  e.preventDefault();
+
+  try {
+
+    await request('/customers', {
+      method:'POST',
+      body:JSON.stringify({
+        name:$('customerName').value.trim(),
+        phone:$('customerPhone').value.trim(),
+        email:$('customerEmail').value.trim() || null
+      })
+    });
+
+    e.target.reset();
+
+    await loadAll();
+
+    notify('Customer saved.');
+
+  } catch (x) {
+    notify(x.message,true);
+  }
+
+});
+
+/* ADD SERVICE */
+$('serviceForm').addEventListener('submit', async e => {
+
+  e.preventDefault();
+
+  try {
+
+    await request('/services', {
+      method:'POST',
+      body:JSON.stringify({
+        name:$('serviceName').value.trim(),
+        price:Number($('servicePrice').value),
+        duration_minutes:Number($('serviceDuration').value),
+        description:$('serviceDescription').value.trim() || null
+      })
+    });
+
+    e.target.reset();
+
+    $('serviceDuration').value = 60;
+
+    await loadAll();
+
+    notify('Service saved.');
+
+  } catch (x) {
+    notify(x.message,true);
+  }
+
+});
+
+/* CREATE APPOINTMENT */
+$('appointmentForm').addEventListener('submit', async e => {
+
+  e.preventDefault();
+
+  try {
+
+    await request('/appointments', {
+      method:'POST',
+      body:JSON.stringify({
+        customer_id:Number($('bookingCustomer').value),
+        service_id:Number($('bookingService').value),
+        appointment_date:$('bookingDate').value.replace('T',' ') + ':00',
+        notes:$('bookingNotes').value.trim() || null
+      })
+    });
+
+    e.target.reset();
+
+    await loadAll();
+
+    notify('Appointment created.');
+
+  } catch (x) {
+    notify(x.message,true);
+  }
+
+});
+
+/* RECORD PAYMENT */
+$('paymentForm').addEventListener('submit', async e => {
+
+  e.preventDefault();
+
+  try {
+
+    await request('/payments', {
+      method:'POST',
+      body:JSON.stringify({
+        appointment_id:Number($('paymentAppointment').value),
+        amount:Number($('paymentAmount').value),
+        payment_method:$('paymentMethod').value,
+        transaction_reference:$('paymentReference').value.trim() || null,
+        status:$('paymentStatus').value
+      })
+    });
+
+    e.target.reset();
+
+    await loadAll();
+
+    notify('Payment recorded.');
+
+  } catch (x) {
+    notify(x.message,true);
+  }
+
+});
+
+/* CUSTOMER SEARCH */
+$('customerSearch').addEventListener('input', () => {
+
+  const q = $('customerSearch').value.toLowerCase();
+
+  const filtered = customers.filter(c =>
+    [c.name,c.phone,c.email].some(v =>
+      String(v || '').toLowerCase().includes(q)
+    )
+  );
+
+  $('customersTable').innerHTML = table(
+    ['Name','Phone','Email','Action'],
+
+    filtered.map(c => `
+      <tr>
+        <td>${esc(c.name)}</td>
+        <td>${esc(c.phone)}</td>
+        <td>${esc(c.email || '—')}</td>
+        <td>
+          <button class="danger" onclick="deleteCustomer(${Number(c.id)})">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `)
+  );
+
+});
+
+/* DELETE CUSTOMER */
+async function deleteCustomer(id) {
+
+  if (!confirm(
+    'Delete this customer? Customers with appointments cannot be deleted.'
+  )) return;
+
+  try {
+
+    await request('/customers/' + id,{method:'DELETE'});
+
+    await loadAll();
+
+    notify('Customer deleted.');
+
+  } catch (e) {
+    notify(e.message,true);
+  }
+
+}
+
+/* DELETE SERVICE */
+async function deleteService(id) {
+
+  if (!confirm(
+    'Delete this service? Services already used in appointments cannot be deleted.'
+  )) return;
+
+  try {
+
+    await request('/services/' + id,{method:'DELETE'});
+
+    await loadAll();
+
+    notify('Service deleted.');
+
+  } catch (e) {
+    notify(e.message,true);
+  }
+
+}
+
+/* CHANGE APPOINTMENT STATUS */
+async function changeAppointment(id,status) {
+
+  try {
+
+    await request('/appointments/' + id, {
+      method:'PATCH',
+      body:JSON.stringify({status})
+    });
+
+    await loadAll();
+
+    notify('Appointment status updated.');
+
+  } catch (e) {
+    notify(e.message,true);
+  }
+
+}
+
+/* REFRESH DASHBOARD */
+$('refreshBtn').addEventListener('click',loadAll);
+
+/* ADMIN LOGOUT */
+$('logoutBtn').addEventListener('click',async () => {
+
+  if (!confirm('Are you sure you want to log out?')) return;
+
+  try {
+
+    const response = await fetch(`${API}/logout`, {
+      method:'POST',
+      credentials:'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Logout failed. Please try again.');
+    }
+
+    window.location.replace('login.html');
+
+  } catch (error) {
+    notify(error.message,true);
+  }
+
+});
+
+/* START APPLICATION */
+async function startDashboard() {
+
+  const authenticated = await checkAdminAccess();
+
+  if (!authenticated) return;
+
+  showPage('dashboard');
+
+  await loadAll();
+
+}
+
+startDashboard();
+
+</script>
+
+</body>
+</html>

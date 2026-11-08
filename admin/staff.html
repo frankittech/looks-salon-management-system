@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Management | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f5f7;
+            color: #333;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #321d2b;
+            color: white;
+            padding: 30px 20px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #f3b6d0;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #eee;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #70465e;
+        }
+
+        .main {
+            flex: 1;
+            padding: 35px;
+            min-width: 0;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #321d2b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #777;
+        }
+
+        .summary {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            max-width: 280px;
+            box-shadow: 0 2px 8px #0000000a;
+        }
+
+        .summary h3 {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .summary strong {
+            font-size: 28px;
+            color: #9d527b;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000a;
+            min-width: 0;
+        }
+
+        .panel h2 {
+            color: #321d2b;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #a75b83;
+        }
+
+        button {
+            border: none;
+            padding: 11px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .primary-btn {
+            background: #9d527b;
+            color: white;
+            width: 100%;
+        }
+
+        .primary-btn:hover {
+            background: #7e3e61;
+        }
+
+        .secondary-btn {
+            background: #eee;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #ffe4e4;
+            color: #b42318;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            color: #777;
+            background: #faf7f9;
+        }
+
+        .status {
+            color: #16834a;
+            background: #e5f7ed;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .inactive {
+            color: #9a6700;
+            background: #fff3cd;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #b42318;
+        }
+
+        .success {
+            color: #16834a;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media(max-width: 950px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">LOOKS SALON</div>
+
+        <a href="admin.html">Dashboard</a>
+        <a href="customers.html">Customers</a>
+        <a href="services.html">Services</a>
+        <a href="staff.html" class="active">Staff</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="payments.html">Payments</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="header">
+            <h1>Staff Management</h1>
+            <p>Register and manage Looks Salon employees.</p>
+        </div>
+
+        <!-- STAFF SUMMARY -->
+        <div class="summary">
+            <h3>Total Staff Members</h3>
+            <strong id="totalStaff">0</strong>
+        </div>
+
+        <div class="content">
+
+            <!-- STAFF FORM -->
+            <section class="panel">
+
+                <h2 id="formTitle">Register Staff Member</h2>
+
+                <div id="message" class="message"></div>
+
+                <form id="staffForm">
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="e.g. 0712345678"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter email address"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Staff Role</label>
+
+                        <select id="role" required>
+                            <option value="">Select a role</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="Hairdresser">Hairdresser</option>
+                            <option value="Stylist">Stylist</option>
+                            <option value="Nail Technician">Nail Technician</option>
+                            <option value="Barber">Barber</option>
+                            <option value="Makeup Artist">Makeup Artist</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                        id="submitBtn"
+                    >
+                        Register Staff
+                    </button>
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="cancelEdit"
+                        style="display:none; width:100%; margin-top:10px;"
+                    >
+                        Cancel Editing
+                    </button>
+
+                </form>
+
+            </section>
+
+            <!-- STAFF TABLE -->
+            <section class="panel">
+
+                <h2>Registered Staff</h2>
+
+                <div class="table-wrapper">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="staffTable">
+                            <tr>
+                                <td colspan="7" class="empty">
+                                    Loading staff members...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+    const API_URL = 'http://localhost:3000/api/staff';
+
+    const staffForm = document.getElementById('staffForm');
+    const staffTable = document.getElementById('staffTable');
+    const message = document.getElementById('message');
+
+    let staffMembers = [];
+    let editingId = null;
+
+    // Display messages
+    function showMessage(text, type = 'success') {
+        message.textContent = text;
+        message.className = `message ${type}`;
+    }
+
+    function clearMessage() {
+        message.textContent = '';
+        message.className = 'message';
+    }
+
+    // Safely display text
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[character]);
+    }
+
+    // Load staff from backend
+    async function loadStaff() {
+
+        try {
+
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error('Could not load staff members.');
+            }
+
+            staffMembers = await response.json();
+
+            document.getElementById('totalStaff').textContent =
+                staffMembers.length;
+
+            renderStaff();
+
+        } catch (error) {
+
+            staffTable.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        ${escapeHTML(error.message)}
+                    </td>
+                </tr>
+            `;
+
+        }
+    }
+
+    // Display staff members
+    function renderStaff() {
+
+        if (staffMembers.length === 0) {
+
+            staffTable.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        No staff members registered yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        staffTable.innerHTML = staffMembers.map(member => {
+
+            const active = Number(member.is_active) === 1;
+
+            return `
+                <tr>
+
+                    <td>${member.id}</td>
+
+                    <td>
+                        <strong>${escapeHTML(member.name)}</strong>
+                    </td>
+
+                    <td>${escapeHTML(member.phone || '-')}</td>
+
+                    <td>${escapeHTML(member.email || '-')}</td>
+
+                    <td>${escapeHTML(member.role || '-')}</td>
+
+                    <td>
+                        <span class="status ${active ? '' : 'inactive'}">
+                            ${active ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="actions">
+
+                            <button
+                                class="secondary-btn"
+                                onclick="editStaff(${member.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="secondary-btn"
+                                onclick="toggleStaff(${member.id}, ${active ? 0 : 1})">
+                                ${active ? 'Deactivate' : 'Activate'}
+                            </button>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteStaff(${member.id})">
+                                Delete
+                            </button>
+
+                        </div>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join('');
+    }
+
+    // Register or update staff
+    staffForm.addEventListener('submit', async (event) => {
+
+        event.preventDefault();
+        clearMessage();
+
+        const staffData = {
+
+            name: document.getElementById('name').value.trim(),
+
+            phone: document.getElementById('phone').value.trim(),
+
+            email: document.getElementById('email').value.trim(),
+
+            role: document.getElementById('role').value
+
+        };
+
+        try {
+
+            const url = editingId
+                ? `${API_URL}/${editingId}`
+                : API_URL;
+
+            const response = await fetch(url, {
+
+                method: editingId ? 'PUT' : 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify(staffData)
+
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not save staff member.');
+            }
+
+            showMessage(
+                editingId
+                    ? 'Staff details updated successfully.'
+                    : 'Staff member registered successfully.'
+            );
+
+            resetForm();
+
+            await loadStaff();
+
+        } catch (error) {
+
+            showMessage(error.message, 'error');
+
+        }
+
+    });
+
+    // Edit staff details
+    function editStaff(id) {
+
+        const member = staffMembers.find(item => item.id === id);
+
+        if (!member) return;
+
+        editingId = id;
+
+        document.getElementById('name').value = member.name || '';
+
+        document.getElementById('phone').value = member.phone || '';
+
+        document.getElementById('email').value = member.email || '';
+
+        document.getElementById('role').value = member.role || '';
+
+        document.getElementById('formTitle').textContent =
+            'Edit Staff Details';
+
+        document.getElementById('submitBtn').textContent =
+            'Save Changes';
+
+        document.getElementById('cancelEdit').style.display = 'block';
+
+        clearMessage();
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Activate or deactivate staff
+    async function toggleStaff(id, isActive) {
+
+        const action = isActive === 1 ? 'activate' : 'deactivate';
+
+        if (!confirm(`Are you sure you want to ${action} this staff member?`)) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(`${API_URL}/${id}/status`, {
+
+                method: 'PATCH',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    is_active: isActive
+                })
+
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not update staff status.');
+            }
+
+            showMessage(`Staff member ${action}d successfully.`);
+
+            await loadStaff();
+
+        } catch (error) {
+
+            showMessage(error.message, 'error');
+
+        }
+    }
+
+    // Delete staff member
+    async function deleteStaff(id) {
+
+        if (!confirm('Are you sure you want to delete this staff member?')) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Could not delete staff member.');
+            }
+
+            showMessage('Staff member deleted successfully.');
+
+            await loadStaff();
+
+        } catch (error) {
+
+            showMessage(error.message, 'error');
+
+        }
+    }
+
+    // Reset registration form
+    function resetForm() {
+
+        staffForm.reset();
+
+        editingId = null;
+
+        document.getElementById('formTitle').textContent =
+            'Register Staff Member';
+
+        document.getElementById('submitBtn').textContent =
+            'Register Staff';
+
+        document.getElementById('cancelEdit').style.display =
+            'none';
+    }
+
+    // Cancel editing
+    document.getElementById('cancelEdit').addEventListener('click', () => {
+
+        resetForm();
+        clearMessage();
+
+    });
+
+    // Load staff when page opens
+    loadStaff();
+
+</script>
+
+</body>
+</html>

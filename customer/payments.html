@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Payments | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            color: #d63384;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-links a {
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #777;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            border-left: 4px solid #d63384;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .summary-card p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .summary-card h2 {
+            color: #d63384;
+            font-size: 25px;
+        }
+
+        .payments-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            background: #fff7fa;
+            color: #777;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: capitalize;
+        }
+
+        .completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .refunded {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media(max-width: 850px) {
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+
+        @media(max-width: 550px) {
+            .header {
+                padding: 15px 4%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .header-links {
+                gap: 10px;
+            }
+
+            .header-links a {
+                font-size: 12px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .payments-section {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">Looks Salon</div>
+
+    <div class="header-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="profile.html">My Profile</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <h1>My Payments</h1>
+        <p>View your payment history and track your salon transactions.</p>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+
+    <section class="summary">
+
+        <div class="summary-card">
+            <p>Total Amount Paid</p>
+            <h2 id="totalPaid">KSh 0</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Completed Payments</p>
+            <h2 id="completedCount">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Pending Payments</p>
+            <h2 id="pendingCount">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Failed Payments</p>
+            <h2 id="failedCount">0</h2>
+        </div>
+
+    </section>
+
+    <section class="payments-section">
+
+        <div class="section-heading">
+            <h2>Payment History</h2>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Appointment ID</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Transaction Reference</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentsTable">
+
+                    <tr>
+                        <td colspan="7" class="message">
+                            Loading your payment records...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2026 Looks Salon. All Rights Reserved.
+</footer>
+
+<script>
+
+    const API_URL = 'http://127.0.0.1:3000/api';
+
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        }[char]));
+    }
+
+    function getArray(response, key) {
+        if (Array.isArray(response)) return response;
+        if (Array.isArray(response[key])) return response[key];
+        if (Array.isArray(response.data)) return response.data;
+        return [];
+    }
+
+    function formatMoney(amount) {
+        return 'KSh ' + Number(amount || 0).toLocaleString('en-KE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function formatDate(dateValue) {
+        if (!dateValue) return 'Not available';
+
+        const date = new Date(dateValue);
+
+        if (isNaN(date.getTime())) {
+            return escapeHTML(dateValue);
+        }
+
+        return date.toLocaleString('en-KE', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function showError(message) {
+        const error = document.getElementById('errorMessage');
+        error.textContent = message;
+        error.style.display = 'block';
+    }
+
+    async function loadPayments() {
+
+        try {
+
+            // Check customer login session.
+            const authResponse = await fetch(
+                `${API_URL}/customer/auth/status`,
+                { credentials: 'include' }
+            );
+
+            const authData = await authResponse.json();
+
+            if (
+                !authResponse.ok ||
+                authData.authenticated === false ||
+                authData.loggedIn === false ||
+                authData.success === false
+            ) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Retrieve customer payment records.
+            const response = await fetch(
+                `${API_URL}/customer/payments`,
+                { credentials: 'include' }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'Unable to retrieve payment records.'
+                );
+            }
+
+            const payments = getArray(data, 'payments');
+
+            // Calculate payment statistics.
+            const completed = payments.filter(payment =>
+                String(payment.status).toLowerCase() === 'completed'
+            );
+
+            const pending = payments.filter(payment =>
+                String(payment.status).toLowerCase() === 'pending'
+            );
+
+            const failed = payments.filter(payment =>
+                String(payment.status).toLowerCase() === 'failed'
+            );
+
+            const total = completed.reduce(
+                (sum, payment) =>
+                    sum + Number(payment.amount || 0),
+                0
+            );
+
+            document.getElementById('totalPaid').textContent =
+                formatMoney(total);
+
+            document.getElementById('completedCount').textContent =
+                completed.length;
+
+            document.getElementById('pendingCount').textContent =
+                pending.length;
+
+            document.getElementById('failedCount').textContent =
+                failed.length;
+
+            displayPayments(payments);
+
+        } catch (error) {
+
+            console.error('Payments error:', error);
+
+            showError(
+                error.message || 'Something went wrong. Please try again.'
+            );
+
+            document.getElementById('paymentsTable').innerHTML = `
+                <tr>
+                    <td colspan="7" class="message">
+                        Could not load your payment records.
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    function displayPayments(payments) {
+
+        const table = document.getElementById('paymentsTable');
+
+        if (payments.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7" class="message">
+                        You do not have any payment records yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        const sortedPayments = [...payments].sort(
+            (a, b) =>
+                new Date(b.created_at || b.paid_at || 0) -
+                new Date(a.created_at || a.paid_at || 0)
+        );
+
+        table.innerHTML = sortedPayments.map(payment => {
+
+            const status = String(
+                payment.status || 'pending'
+            ).toLowerCase();
+
+            const allowedStatuses = [
+                'completed',
+                'pending',
+                'failed',
+                'refunded'
+            ];
+
+            const statusClass = allowedStatuses.includes(status)
+                ? status
+                : '';
+
+            return `
+                <tr>
+
+                    <td>#${escapeHTML(payment.id)}</td>
+
+                    <td>#${escapeHTML(payment.appointment_id)}</td>
+
+                    <td>${formatMoney(payment.amount)}</td>
+
+                    <td>
+                        ${escapeHTML(payment.payment_method || 'Not specified')}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(payment.transaction_reference || 'N/A')}
+                    </td>
+
+                    <td>
+                        <span class="status ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${formatDate(payment.paid_at || payment.created_at)}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join('');
+    }
+
+    async function logout() {
+
+        try {
+
+            await fetch(`${API_URL}/customer/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+
+            window.location.href = 'login.html';
+
+        } catch (error) {
+
+            console.error('Logout error:', error);
+
+            alert('Unable to log out. Please try again.');
+        }
+    }
+
+    // Load payments when the page opens.
+    loadPayments();
+
+</script>
+
+</body>
+</html>

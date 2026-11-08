@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            color: #d63384;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-links a {
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 750px;
+            margin: 40px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #777;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .profile-top {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #fde5ef;
+            color: #d63384;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-top h2 {
+            margin-bottom: 6px;
+        }
+
+        .profile-top p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #d63384;
+            box-shadow: 0 0 4px rgba(214,51,132,0.2);
+        }
+
+        .form-group input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .help-text {
+            display: block;
+            color: #888;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .save-btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .save-btn:hover {
+            background: #b8256c;
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #444;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .message {
+            display: none;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media(max-width: 550px) {
+            .header {
+                padding: 15px 4%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .header-links {
+                gap: 10px;
+            }
+
+            .header-links a {
+                font-size: 12px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">Looks Salon</div>
+
+    <div class="header-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="payments.html">Payments</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <h1>My Profile</h1>
+        <p>Manage your personal information and account details.</p>
+    </div>
+
+    <section class="profile-card">
+
+        <div class="profile-top">
+
+            <div class="profile-icon">👤</div>
+
+            <h2 id="profileName">Customer Profile</h2>
+
+            <p>Keep your contact information up to date.</p>
+
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="profileForm">
+
+            <div class="form-group">
+
+                <label for="name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    required
+                    minlength="2"
+                    maxlength="100"
+                    placeholder="Enter your full name"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="phone">Phone Number</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    required
+                    maxlength="20"
+                    placeholder="Enter your phone number"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    maxlength="150"
+                    placeholder="Enter your email address"
+                >
+
+                <span class="help-text">
+                    Your email address is also used to log in.
+                </span>
+
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                    id="saveBtn"
+                >
+                    Save Changes
+                </button>
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="loadProfile()"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2026 Looks Salon. All Rights Reserved.
+</footer>
+
+<script>
+
+    const API_URL = 'http://127.0.0.1:3000/api';
+
+    let originalProfile = {};
+
+    function showMessage(message, type) {
+
+        const messageBox = document.getElementById('message');
+
+        messageBox.textContent = message;
+
+        messageBox.className = 'message ' + type;
+
+        messageBox.style.display = 'block';
+    }
+
+    function hideMessage() {
+
+        document.getElementById('message').style.display = 'none';
+
+    }
+
+    async function loadProfile() {
+
+        hideMessage();
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/customer/profile`,
+                {
+                    credentials: 'include'
+                }
+            );
+
+            const data = await response.json();
+
+            if (response.status === 401 || response.status === 403) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'Unable to load your profile.'
+                );
+            }
+
+            const customer = data.customer || data;
+
+            document.getElementById('name').value =
+                customer.name || '';
+
+            document.getElementById('phone').value =
+                customer.phone || '';
+
+            document.getElementById('email').value =
+                customer.email || '';
+
+            document.getElementById('profileName').textContent =
+                customer.name || 'Customer Profile';
+
+            originalProfile = {
+                name: customer.name || '',
+                phone: customer.phone || '',
+                email: customer.email || ''
+            };
+
+        } catch (error) {
+
+            console.error('Profile loading error:', error);
+
+            showMessage(
+                error.message || 'Something went wrong.',
+                'error'
+            );
+
+        }
+
+    }
+
+    document.getElementById('profileForm').addEventListener(
+        'submit',
+        async function(event) {
+
+            event.preventDefault();
+
+            hideMessage();
+
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!name || !phone || !email) {
+
+                showMessage(
+                    'Please fill in all the required fields.',
+                    'error'
+                );
+
+                return;
+            }
+
+            const saveButton = document.getElementById('saveBtn');
+
+            saveButton.disabled = true;
+            saveButton.textContent = 'Saving...';
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/customer/profile`,
+                    {
+                        method: 'PUT',
+
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+
+                        credentials: 'include',
+
+                        body: JSON.stringify({
+                            name: name,
+                            phone: phone,
+                            email: email
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.status === 401 || response.status === 403) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message || 'Unable to update your profile.'
+                    );
+
+                }
+
+                originalProfile = {
+                    name: name,
+                    phone: phone,
+                    email: email
+                };
+
+                document.getElementById('profileName').textContent = name;
+
+                showMessage(
+                    data.message || 'Your profile has been updated successfully!',
+                    'success'
+                );
+
+            } catch (error) {
+
+                console.error('Profile update error:', error);
+
+                showMessage(
+                    error.message || 'Something went wrong. Please try again.',
+                    'error'
+                );
+
+            } finally {
+
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Changes';
+
+            }
+
+        }
+    );
+
+    async function logout() {
+
+        try {
+
+            await fetch(`${API_URL}/customer/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+
+            window.location.href = 'login.html';
+
+        } catch (error) {
+
+            console.error('Logout error:', error);
+
+            alert('Unable to log out. Please try again.');
+
+        }
+
+    }
+
+    // Load customer information when the page opens.
+    loadProfile();
+
+</script>
+
+</body>
+</html>

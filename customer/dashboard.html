@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard | Looks Salon</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff7fa;
+            color: #333;
+        }
+
+        .header {
+            background: #fff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            color: #d63384;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-right a {
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        .welcome p {
+            color: #777;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid #d63384;
+        }
+
+        .stat-card p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h2 {
+            color: #d63384;
+            font-size: 27px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+        }
+
+        .section-heading a {
+            color: #d63384;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            color: #777;
+            background: #fff7fa;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: capitalize;
+            background: #f1f1f1;
+        }
+
+        .status.confirmed,
+        .status.completed {
+            background: #e5f7eb;
+            color: #218838;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.cancelled,
+        .status.failed {
+            background: #f8d7da;
+            color: #b02a37;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .quick-link {
+            display: block;
+            background: #fff7fa;
+            padding: 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #f8d7e5;
+            transition: 0.2s;
+        }
+
+        .quick-link:hover {
+            background: #fde8f1;
+            transform: translateY(-3px);
+        }
+
+        .quick-link h3 {
+            color: #d63384;
+            margin-bottom: 8px;
+        }
+
+        .quick-link p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .message {
+            padding: 15px;
+            color: #777;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #b02a37;
+            background: #f8d7da;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .header {
+                padding: 15px 4%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .header-right a {
+                font-size: 12px;
+            }
+
+            .logout-btn {
+                padding: 8px 12px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+
+            .section {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">Looks Salon</div>
+
+        <div class="header-right">
+            <a href="../index.html">Home</a>
+            <a href="profile.html">My Profile</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="welcome">
+            <h1>Welcome, <span id="customerName">Customer</span>!</h1>
+            <p>Manage your appointments and keep track of your payments.</p>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <p>Total Appointments</p>
+                <h2 id="totalAppointments">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Pending Appointments</p>
+                <h2 id="pendingAppointments">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Completed Appointments</p>
+                <h2 id="completedAppointments">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Total Payments Made</p>
+                <h2 id="totalPayments">KSh 0</h2>
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <div class="section-heading">
+                <h2>Recent Appointments</h2>
+                <a href="appointments.html">View All</a>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Staff</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="appointmentsTable">
+                        <tr>
+                            <td colspan="4" class="message">
+                                Loading appointments...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <div class="section-heading">
+                <h2>Quick Access</h2>
+            </div>
+
+            <div class="quick-links">
+
+                <a href="appointments.html" class="quick-link">
+                    <h3>My Appointments</h3>
+                    <p>View your bookings and check their current status.</p>
+                </a>
+
+                <a href="payments.html" class="quick-link">
+                    <h3>My Payments</h3>
+                    <p>View your payment history and transaction details.</p>
+                </a>
+
+                <a href="profile.html" class="quick-link">
+                    <h3>My Profile</h3>
+                    <p>View and update your personal information.</p>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        &copy; 2026 Looks Salon. All Rights Reserved.
+    </footer>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:3000/api';
+
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, function(char) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[char];
+            });
+        }
+
+        function formatMoney(amount) {
+            return 'KSh ' + Number(amount || 0).toLocaleString('en-KE', {
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatDate(dateValue) {
+            if (!dateValue) return 'Not available';
+
+            const date = new Date(dateValue);
+
+            if (isNaN(date.getTime())) {
+                return escapeHTML(dateValue);
+            }
+
+            return date.toLocaleDateString('en-KE', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function getArray(response, key) {
+            if (Array.isArray(response)) return response;
+            if (Array.isArray(response[key])) return response[key];
+            if (Array.isArray(response.data)) return response.data;
+            return [];
+        }
+
+        function showError(message) {
+            const error = document.getElementById('errorMessage');
+            error.textContent = message;
+            error.style.display = 'block';
+        }
+
+        async function loadDashboard() {
+            try {
+                // Check whether the customer is logged in.
+                const authResponse = await fetch(
+                    `${API_URL}/customer/auth/status`,
+                    { credentials: 'include' }
+                );
+
+                const authData = await authResponse.json();
+
+                if (
+                    !authResponse.ok ||
+                    authData.authenticated === false ||
+                    authData.loggedIn === false ||
+                    authData.success === false
+                ) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const customer =
+                    authData.customer ||
+                    authData.user ||
+                    authData;
+
+                document.getElementById('customerName').textContent =
+                    customer.name || 'Customer';
+
+                // Load appointments and payments.
+                const [appointmentsResponse, paymentsResponse] =
+                    await Promise.all([
+                        fetch(`${API_URL}/customer/appointments`, {
+                            credentials: 'include'
+                        }),
+                        fetch(`${API_URL}/customer/payments`, {
+                            credentials: 'include'
+                        })
+                    ]);
+
+                if (
+                    !appointmentsResponse.ok ||
+                    !paymentsResponse.ok
+                ) {
+                    throw new Error('Unable to load your dashboard information.');
+                }
+
+                const appointmentsData = await appointmentsResponse.json();
+                const paymentsData = await paymentsResponse.json();
+
+                const appointments = getArray(
+                    appointmentsData,
+                    'appointments'
+                );
+
+                const payments = getArray(
+                    paymentsData,
+                    'payments'
+                );
+
+                // Calculate appointment statistics.
+                const pending = appointments.filter(
+                    appointment =>
+                        String(appointment.status).toLowerCase() === 'pending'
+                ).length;
+
+                const completed = appointments.filter(
+                    appointment =>
+                        String(appointment.status).toLowerCase() === 'completed'
+                ).length;
+
+                document.getElementById('totalAppointments').textContent =
+                    appointments.length;
+
+                document.getElementById('pendingAppointments').textContent =
+                    pending;
+
+                document.getElementById('completedAppointments').textContent =
+                    completed;
+
+                // Calculate payments that have been completed.
+                const paidAmount = payments
+                    .filter(payment =>
+                        String(payment.status).toLowerCase() === 'completed'
+                    )
+                    .reduce(
+                        (total, payment) =>
+                            total + Number(payment.amount || 0),
+                        0
+                    );
+
+                document.getElementById('totalPayments').textContent =
+                    formatMoney(paidAmount);
+
+                displayAppointments(appointments);
+
+            } catch (error) {
+                console.error('Dashboard error:', error);
+
+                showError(
+                    error.message ||
+                    'Something went wrong while loading your dashboard.'
+                );
+            }
+        }
+
+        function displayAppointments(appointments) {
+            const table = document.getElementById('appointmentsTable');
+
+            if (appointments.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="message">
+                            You have not booked any appointments yet.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Show the five most recent appointments.
+            const recentAppointments = [...appointments]
+                .sort((a, b) =>
+                    new Date(b.appointment_date) -
+                    new Date(a.appointment_date)
+                )
+                .slice(0, 5);
+
+            table.innerHTML = recentAppointments.map(appointment => {
+                const status = String(
+                    appointment.status || 'pending'
+                ).toLowerCase();
+
+                return `
+                    <tr>
+                        <td>${escapeHTML(appointment.service_name || 'Salon Service')}</td>
+                        <td>${formatDate(appointment.appointment_date)}</td>
+                        <td>${escapeHTML(appointment.staff_name || 'Not assigned')}</td>
+                        <td>
+                            <span class="status ${escapeHTML(status)}">
+                                ${escapeHTML(status)}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_URL}/customer/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                window.location.href = 'login.html';
+
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Unable to log out. Please try again.');
+            }
+        }
+
+        // Load dashboard information when the page opens.
+        loadDashboard();
+    </script>
+
+</body>
+</html>

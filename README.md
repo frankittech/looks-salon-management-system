@@ -205,13 +205,13 @@ node server.js
 The backend should start at:
 
 ```text
-http://localhost:3000
+const API_URL = 'https://looks-salon-management-system.onrender.com/api';
 ```
 
 Check whether the API is running by visiting:
 
 ```text
-http://localhost:3000/api/health
+const API_URL = 'https://looks-salon-management-system.onrender.com/api';
 ```
 
 ### Step 5: Run the Frontend
@@ -259,7 +259,7 @@ The backend provides API endpoints for:
 The API runs locally on:
 
 ```text
-http://localhost:3000
+const API_URL = 'https://looks-salon-management-system.onrender.com/api';
 ```
 
 ## 10. Running the Application

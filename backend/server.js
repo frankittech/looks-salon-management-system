@@ -351,7 +351,11 @@ app.post('/api/customer/register', asyncRoute(async (req, res) => {
 }));
 
 // CUSTOMER LOGIN
+
+// CUSTOMER LOGIN
 app.post('/api/customer/login', loginLimiter, asyncRoute(async (req, res) => {
+    console.log('CUSTOMER LOGIN: Request received');
+
     const email = String(req.body.email || '').trim().toLowerCase();
     const password = req.body.password;
 
@@ -360,6 +364,8 @@ app.post('/api/customer/login', loginLimiter, asyncRoute(async (req, res) => {
             message: 'Email and password are required.'
         });
     }
+
+    console.log('CUSTOMER LOGIN: Checking database');
 
     const [rows] = await pool.execute(
         `SELECT
@@ -374,6 +380,8 @@ app.post('/api/customer/login', loginLimiter, asyncRoute(async (req, res) => {
          WHERE ca.email = ?`,
         [email]
     );
+
+    console.log('CUSTOMER LOGIN: Database query completed');
 
     if (!rows.length) {
         return res.status(401).json({
@@ -394,8 +402,11 @@ app.post('/api/customer/login', loginLimiter, asyncRoute(async (req, res) => {
         });
     }
 
-    // Regenerate session ID after successful authentication
+    console.log('CUSTOMER LOGIN: Password verified');
+
     await regenerateSession(req);
+
+    console.log('CUSTOMER LOGIN: Session regenerated');
 
     req.session.customer = {
         id: customer.customer_id,
@@ -404,11 +415,25 @@ app.post('/api/customer/login', loginLimiter, asyncRoute(async (req, res) => {
         email: customer.email
     };
 
+    // Explicitly save the session before responding
+    await new Promise((resolve, reject) => {
+        req.session.save(error => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve();
+            }
+        });
+    });
+
+    console.log('CUSTOMER LOGIN: Session saved successfully');
+
     res.json({
         message: 'Customer login successful.',
         customer: req.session.customer
     });
 }));
+
 
 // CHECK CUSTOMER LOGIN STATUS
 app.get('/api/customer/auth/status', (req, res) => {

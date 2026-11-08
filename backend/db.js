@@ -10,9 +10,12 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME || "looks_salon",
 
     // Secure connection for TiDB Cloud
-    ssl: process.env.DB_SSL === "true"
-        ? { rejectUnauthorized: true }
-        : undefined,
+    ssl: process.env.DB_SSL === 'true'
+    ? {
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: true
+    }
+    : undefined,
 
     waitForConnections: true,
     connectionLimit: 10,

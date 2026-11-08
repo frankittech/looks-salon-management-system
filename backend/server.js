@@ -7,7 +7,7 @@ const pool = require('./db');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
-const MySQLStore = require('express-mysql-session')(session);
+const MySQLStore = require('express-session-mysql2')(session);
 
 // Ensure a session secret exists
 if (!process.env.SESSION_SECRET) {

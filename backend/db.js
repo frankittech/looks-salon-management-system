@@ -8,8 +8,15 @@ const pool = mysql.createPool({
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "looks_salon",
+
+    // Secure connection for TiDB Cloud
+    ssl: process.env.DB_SSL === "true"
+        ? { rejectUnauthorized: true }
+        : undefined,
+
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 module.exports = pool;

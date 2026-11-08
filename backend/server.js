@@ -16,15 +16,25 @@ if (!process.env.SESSION_SECRET) {
     );
 }
 
+
 const app = express();
+app.set('trust proxy', 1);
+
 const sessionStore = new MySQLStore({
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || 'looks_salon',
+
+    // Secure connection for TiDB Cloud
+    ssl: process.env.DB_SSL === 'true'
+        ? { rejectUnauthorized: true }
+        : undefined,
+
     createDatabaseTable: true
 });
+
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // Maximum 5 attempts
@@ -40,7 +50,10 @@ const loginLimiter = rateLimit({
 // ==========================================
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
+    origin: [
+        'http://127.0.0.1:5500',
+        process.env.FRONTEND_URL
+    ].filter(Boolean),
     credentials: true
 }));
 
@@ -57,7 +70,7 @@ app.use(session({
 
     cookie: {
         httpOnly: true,
-        secure: false, // Local HTTP development only
+        secure: process.env.NODE_ENV === 'production', //  HTTPs development only
         sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 2
     }
